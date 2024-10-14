@@ -2,15 +2,28 @@
 
 ## Group Members and Responsibilities
 
-- Corinna Martin: ...
+- Corinna Martin: 
+    - myhistory command
+    - I/O redirection
 
-- Alexis Aguilar: ...
+- Alexis Aguilar: 
+    - path command
+    - ...
 
-- Elizabeth Nguyen: ...
+- Elizabeth Nguyen: 
+    - cd command
+    - alias command
 
-- Nelli Salinas: ...
+- Nelli Salinas: 
+    - exit command
+    - ...
 
-- All: ...
+- All: 
+    - Interactive mode
+    - Batch mode
+    - Defensive programming
+    - Makefile
+    - README file
 
 ## Design Overview
 
