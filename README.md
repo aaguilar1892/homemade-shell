@@ -7,13 +7,13 @@
     - I/O redirection
 - Alexis Aguilar: 
     - path command
-    - ...
+    - pipelining
 - Elizabeth Nguyen: 
     - cd command
     - alias command
 - Nelli Salinas: 
     - exit command
-    - ...
+    - signal handling & terminal control
 - All: 
     - Interactive mode
     - Batch mode
