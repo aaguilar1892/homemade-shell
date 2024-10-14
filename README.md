@@ -12,7 +12,7 @@
 
 - All: ...
 
-##Design Overview
+## Design Overview
 
 TODO: A few paragraphs describing the overall structure of your code and any important structures...
 
@@ -20,7 +20,7 @@ TODO: A few paragraphs describing the overall structure of your code and any imp
 
 - filename: description...
 
-###Complete Specification
+### Complete Specification
 
 TODO: Describe how you handled any ambiguities in the specification. For example, for this project, explain how your shell will handle lines that have no commands between semi-colons...
 
