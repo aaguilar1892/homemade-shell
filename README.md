@@ -12,9 +12,17 @@
 
 - All: ...
 
-## Program Description
+##Design Overview
+
+TODO: A few paragraphs describing the overall structure of your code and any important structures...
+
+### Program Description
 
 - filename: description...
+
+###Complete Specification
+
+TODO: Describe how you handled any ambiguities in the specification. For example, for this project, explain how your shell will handle lines that have no commands between semi-colons...
 
 ## Compilation Methods
 
