@@ -30,6 +30,11 @@ int main(int argc, char* argv[]){
                     }
             }
 
+            //Delete trailing whitespace
+            for(int i = strlen(cmd) - 1; i >= 0 && isspace(cmd[i]); --i){
+                   cmd[i] = '\0';
+            }
+
             //If user input contains multiple commands, separate at ';' and execute sequentially
 
         }
