@@ -35,6 +35,8 @@ int main(int argc, char* argv[]){
                    cmd[i] = '\0';
             }
 
+            //Delete extra whitespace in the middle...
+
             //If user input contains multiple commands, separate at ';' and execute sequentially
 
         }
