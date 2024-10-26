@@ -1,8 +1,15 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include "myhistory.h"
 
 int main(int argc, char* argv[]){
+
+    char cmd[512]; //Represents user-entered string
+    char currCmd[512]; //Represents individual command to be processed
+    char num[2]; //Represents # command to execute from history
 
     //Interactive mode
     if(argc == 1){
@@ -11,6 +18,9 @@ int main(int argc, char* argv[]){
         while(1 == 1){
             
             //Get user input
+            printf("Enter command: ");
+            fgets(cmd, 512, stdin);
+            cmd[strlen(cmd)-1] = '\0';
 
             //If user input contains multiple commands, separate at ';' and execute sequentially
 
