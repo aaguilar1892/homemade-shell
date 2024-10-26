@@ -22,6 +22,14 @@ int main(int argc, char* argv[]){
             fgets(cmd, 512, stdin);
             cmd[strlen(cmd)-1] = '\0';
 
+            //Delete leading whitespace
+            for(int i = 0; i < strlen(cmd); ++i){
+                    if(!isspace(cmd[i])){
+                            strncpy(cmd, cmd + i, strlen(cmd));
+                            break;
+                    }
+            }
+
             //If user input contains multiple commands, separate at ';' and execute sequentially
 
         }
