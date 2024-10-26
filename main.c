@@ -22,5 +22,13 @@ int main(int argc, char* argv[]){
 
     }
 
+    //Print error message if incorrect # of command line arguments
+    if(argc != 1 && argc != 2){
+            fprintf(stderr, "\n\t --- ERROR: Incorrect number of command line arguments ---\n\n");
+            fprintf(stderr, "\tInteractive Mode: ./a.out\n");
+            fprintf(stderr, "\tBatch Mode: ./a.out <batch_file>\n\n");
+            exit(1);
+    }
+
     return 0;
 }
