@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include "myhistory.h"
+#include "cd.c"
 
 int main(int argc, char* argv[]){
 
