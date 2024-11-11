@@ -67,10 +67,10 @@ void myhistory_e(int num){
                 }
 
                 //Add command to history
-                myhistory_add(cmd_history[num-1]);
-
+                if(strcmp(cmd_history[num-1], "\0") != 0){
+                        myhistory_add(cmd_history[num-1]);
+                }
         }
-
 }
 
 //Updates command history
