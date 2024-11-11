@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <sys/wait.h>
 #include "myhistory.h"
 #include "cd.c"
 
@@ -58,6 +59,38 @@ int main(int argc, char* argv[]){
 
             //If user input contains multiple commands, separate at ';' and execute sequentially
 
+            //Execute custom commands
+            if(strncmp(cmd, "myhistory", 9) == 0){
+                //Execute myhistory commands
+                if(strcmp(cmd, "myhistory") == 0 || strcmp(cmd, "myhistory;") == 0){
+                        myhistory_add(cmd);
+                        myhistory();
+                }
+                if(strncmp(cmd, "myhistory -e", 12) == 0 && isdigit(cmd[13])){
+                        strncpy(num, cmd + 13, strlen(cmd));
+                        myhistory_e(atoi(num));
+                }
+                if(strcmp(cmd, "myhistory -c") == 0 || strcmp(cmd, "myhistory -c;") == 0){
+                        myhistory_add(cmd);
+                        myhistory_c();
+                }
+
+                //Usage statements
+                if(strncmp(cmd, "myhistory -e", 12) == 0 && !isdigit(cmd[13])) {printf("Usage: myhistory -e <myhistory_number>\n");}
+                }
+            else{
+                //Execute other commands
+                pid_t pid = fork();
+
+                if(pid > 0){wait(NULL);}
+                if(pid == 0){
+                    execl("/bin/sh", "/bin/sh", "-c", cmd, (char *)0);
+                    printf("\n");
+                }
+                
+                //Add command to history
+                myhistory_add(cmd);
+            }
         }
     }
 
