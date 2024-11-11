@@ -57,6 +57,11 @@ int main(int argc, char* argv[]){
                     }
             }
 
+            //If empty command line, process next command
+            if(strcmp(cmd, "\0") == 0 || strncmp(cmd, " ", 1) == 0 || strcmp(cmd, ";") == 0){
+                    continue;
+            }
+
             //If user input contains multiple commands, separate at ';' and execute sequentially
 
             //Execute custom commands
