@@ -10,6 +10,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <sys/wait.h>
+#include <sys/types.h>
+#include <unistd.h>
+
+void myhistory_add(char *newCmd);
 
 char cmd_history[20][512]; //Array storing a max of 20 previously run commands
 int history_num_cmds = 0; //Represents the # commands stored in history
@@ -48,6 +53,23 @@ void myhistory_e(int num){
         char numChar[2];
 
         //Execute specified command
+
+        //Check for custom commands
+        if(strcmp(cmd_history[num - 1], "myhistory") == 0) {myhistory();}
+        else{
+                //Execute other commands
+                pid_t pid = fork();
+
+                if(pid > 0){wait(NULL);}
+                if(pid == 0){
+                    execl("/bin/sh", "/bin/sh", "-c", cmd_history[num-1], (char *)0);
+                    printf("\n");
+                }
+
+                //Add command to history
+                myhistory_add(cmd_history[num-1]);
+
+        }
 
 }
 
