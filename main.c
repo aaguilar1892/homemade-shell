@@ -37,6 +37,23 @@ int main(int argc, char* argv[]){
             }
 
             //Delete extra whitespace in the middle...
+            bool currSpace = false;
+            bool nextSpace = false;
+
+            for(int i = 0; i < strlen(cmd); ++i){
+
+                    currSpace = isspace(cmd[i]);
+                    nextSpace = isspace(cmd[i+1]);
+
+                    if(currSpace){
+                        if(nextSpace){
+                            for(int j = i; j < strlen(cmd); ++j){
+                                    cmd[j] = cmd[j+1];
+                            }
+                            --i;
+                        }
+                    }
+            }
 
             //If user input contains multiple commands, separate at ';' and execute sequentially
 
