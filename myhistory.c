@@ -25,10 +25,8 @@ void myhistory(){
         printf("\n\t--- COMMAND HISTORY ---\n\n");
 
         //Print each command
-        int j = 0;
-        for(int i = history_num_cmds - 1; i >= 0; --i){
-                printf("\t#%d: %s\n", i+1, cmd_history[j]);
-                ++j;
+        for(int i = 0; i < history_num_cmds; ++i){
+                printf("\t#%d: %s\n", i+1, cmd_history[i]);
         }
 
         printf("\n\t-----------------------\n\n");
