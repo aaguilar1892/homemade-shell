@@ -7,7 +7,7 @@
 #include <sys/wait.h>
 #include "myhistory.h"
 #include "preprocessing.h"
-#include "cd.c"
+#include "cd.h"
 
 int main(int argc, char* argv[]){
 
