@@ -54,7 +54,7 @@ int main(int argc, char* argv[]){
 
                 //Usage statements
                 if(strncmp(cmd, "myhistory -e", 12) == 0 && !isdigit(cmd[13])) {printf("Usage: myhistory -e <myhistory_number>\n");}
-                }
+            }
             else{
                 //Execute other commands
                 pid_t pid = fork();
