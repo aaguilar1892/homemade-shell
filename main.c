@@ -4,10 +4,12 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <errno.h>
 #include <sys/wait.h>
 #include "myhistory.h"
 #include "preprocessing.h"
 #include "cd.h"
+#include "redirecting.h"
 
 int main(int argc, char* argv[]){
 
@@ -35,6 +37,26 @@ int main(int argc, char* argv[]){
             }
 
             //If user input contains multiple commands, separate at ';' and execute sequentially
+
+            //Check for I/O redirection
+            char fileName[512];
+            char *ltPtr = strchr(cmd, '<');
+            char *gtPtr = strchr(cmd, '>');
+
+            if(ltPtr){
+                int i = (int)(ltPtr - cmd);
+                strcpy(fileName, cmd + i+2);
+
+                input_redirection(cmd, fileName);
+                continue;
+            }
+            if(gtPtr){
+                int i = (int)(gtPtr - cmd);
+                strcpy(fileName, cmd + i+2);
+
+                output_redirection(cmd, fileName);
+                continue;
+            }
 
             //Check if command is an alias
             checkAlias(cmd);
