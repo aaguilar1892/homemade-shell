@@ -27,9 +27,11 @@ The program takes two parameters, int argc, and char* argv[], representing the a
 
 If the argument count is equal to 1, the program enters an interactive mode where the user can type their commands in the command line until they choose to exit the program. If the argument count is equal to 2, the program enters a batch mode where commands are executed from the file specified by the user when the program was called. If the argument count is not equal to either of these two values, the program prints a usage statement informing the user of the correct way to call it before exiting.
 
-For the interactive mode, the user is prompted to enter their command into the shell. Any extra whitespace is removed from the user's command. If the user entered an empty command line, the shell immediately prompts for another command. Otherwise, the program moves on to check if the command calls for I/O redirection. If the command string contains either '<' or '>', a function is called to implement either input or output redirection. After this, the program checks if the user's command string matches any one of the built-in commands, and calls the corresponding functions related to them. Finally, if this is not the case, the program forks the parent process and executes the user-entered command inside the child process. In all cases, after the user's command has been executed, it is recorded in the command history.
+For the interactive mode, the user is prompted to enter their command into the shell. The input is seperated by the ';' character into individual commands. The command is then passed into the runCommands() function. 
 
-TODO... (Batch Mode)
+For the batch mode, the filename specified as an argument is opened as an input file stream. The file is read line by line, echoing each line to the terminal. After the line is echoed, the commands is then seperated by ';' (if applicable) and each command is run seperately. The command is then passed to the runCommands() function to execute the given command. The file is read until the end is reached or an exit command is reached.
+
+Both of the modes pass commands to the runCommands() function. In the function, any extra whitespace is removed from the command. If the program encounters an empty command, the shell continues to the next command. Otherwise, the program moves on to check if the command is an alias. If it is, the command is then replaced with the actual command. Then the function checks if the command calls for I/O redirection. If the command string contains either '<' or '>', a function is called to implement either input or output redirection. After this, the program checks if the user's command string matches any one of the built-in commands, and calls the corresponding functions related to them. Finally, if this is not the case, the program forks the parent process and executes the user-entered command inside the child process. In all cases, after the user's command has been executed, it is recorded in the command history.
 
 ### Program Description
 
@@ -52,6 +54,10 @@ TODO...
 **myhistory**
 
 If the user enters a command that does not exist, it will still be recorded in the command history. Additionally, when the user executes one of the myhistory commands, only the _myhistory_ command with no flags will be recorded in the command history. Because of this, when the user clears the command history with _myhistory -c_, if they call the _myhistory_ command immediately after this, they will see _myhistory_ as the only command in the history. As for _myhistory -e [command #]_, the command number that it refers to will be recorded in the history in place of the command itself. 
+
+**alias**
+
+If the user tries to define an alias with a name that already exists, an error message is output that the name already exists. To change the command that a name points to, the user would have to remove the existing alias and redefine it.
 
 ## Compilation Methods
 
