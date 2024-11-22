@@ -11,7 +11,6 @@
 #include "cd.h"
 #include "redirecting.h"
 #include "alias.h"
-#include "redirecting.h"
 
 int main(int argc, char* argv[]){
 
@@ -38,7 +37,6 @@ int main(int argc, char* argv[]){
                     continue;
             }
 
-        
             //If user input contains multiple commands, separate at ';' and execute sequentially
 
             //Check for I/O redirection
@@ -96,13 +94,12 @@ int main(int argc, char* argv[]){
                 }
                 //if -r flag set, remove specific alias
                 else if (strncmp(cmd,"alias -r ",9)==0) {
-
                     strcpy(alName, cmd+9);
                     aliasDel(alName);
 
                 }
                 //add alias
-                else if (strncmp(cmd, "alias ", 6) == 0) { 
+                else if (strncmp(cmd, "alias ", 6) == 0) {
                     strcpy(alName, cmd+6);
                     aliasAdd(alName);
                 }
@@ -133,8 +130,6 @@ int main(int argc, char* argv[]){
             }
         }
     }
-
-
 
     //Batch mode
     if(argc == 2){
@@ -259,4 +254,3 @@ int main(int argc, char* argv[]){
 
     return 0;
 }
-
