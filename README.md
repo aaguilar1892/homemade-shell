@@ -34,6 +34,10 @@ TODO... (Batch Mode)
 ### Program Description
 
 - filename: description...
+- preprocessing.c: Removes extra whitespace from user-entered command
+- redirecting.c: Implements input & output redirection
+- myhistory.c: Manages a list of the executed commands
+- ...
 
 ### Complete Specification
 
