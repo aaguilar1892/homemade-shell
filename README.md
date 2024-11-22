@@ -8,7 +8,7 @@
 - Alexis Aguilar: 
     - path command
     - pipelining
-- Elizabeth Nguyen: 
+- Elisabeth Nguyen: 
     - cd command
     - alias command
 - Nelli Salinas: 
@@ -37,6 +37,8 @@ TODO... (Batch Mode)
 - preprocessing.c: Removes extra whitespace from user-entered command
 - redirecting.c: Implements input & output redirection
 - myhistory.c: Manages a list of the executed commands
+- alias.c: Manages the alias database with addition, removal, and print functions
+- cd.c: Changes the working directory to the user's home or to the specified path
 - ...
 
 ### Complete Specification
