@@ -57,17 +57,25 @@ If the user enters a command that does not exist, it will still be recorded in t
 
 A Makefile is included in the repository. The purpose of this file is to facilitate the compilation process. To execute the compilation process, use the command `make`.
 
+Executing the command will create an executable file called `newshell`.
+
+To execute the shell in **interactive mode**, type `./newshell` into the terminal.
+
+To execute the shell in **batch mode**, type `./newshell [file]` where `[file]` is the file with the commands to execute.
+
 To clean up any files that were created in the process, use `make clean`.
 
 ### Manual Terminal Compilation
 
 To compile the files manually from the terminal, you will have to type out the complete string command. The command is:
 
-`...`
+`gcc -Wall -Wextra -g main.c preprocessing.c redirecting.c myhistory.c cd.c alias.c path.c pipelining.c exit.c signal-control.c -o newshell`
 
-Executing the command will create an executable file called `...`.
+Executing the command will create an executable file called `newshell`.
 
-To execute it, type `...` into the terminal.
+To execute the shell in **interactive mode**, type `./newshell` into the terminal.
+
+To execute the shell in **batch mode**, type `./newshell [file]` where `[file]` is the file with the commands to execute.
 
 ## Known Issues
 
