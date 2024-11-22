@@ -138,7 +138,7 @@ int main(int argc, char* argv[]){
                     execl("/bin/sh", "/bin/sh", "-c", cmd, (char *)0);
                     printf("\n");
                 }
-                
+
                 //Add command to history
                 myhistory_add(cmd);
             }
