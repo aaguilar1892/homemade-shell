@@ -23,7 +23,13 @@
 
 ## Design Overview
 
-TODO: A few paragraphs describing the overall structure of your code and any important structures...
+The program takes two parameters, int argc, and char* argv[], representing the argument count and the command line arguments themselves. 
+
+If the argument count is equal to 1, the program enters an interactive mode where the user can type their commands in the command line until they choose to exit the program. If the argument count is equal to 2, the program enters a batch mode where commands are executed from the file specified by the user when the program was called. If the argument count is not equal to either of these two values, the program prints a usage statement informing the user of the correct way to call it before exiting.
+
+For the interactive mode, the user is prompted to enter their command into the shell. Any extra whitespace is removed from the user's command. If the user entered an empty command line, the shell immediately prompts for another command. Otherwise, the program moves on to check if the command calls for I/O redirection. If the command string contains either '<' or '>', a function is called to implement either input or output redirection. After this, the program checks if the user's command string matches any one of the built-in commands, and calls the corresponding functions related to them. Finally, if this is not the case, the program forks the parent process and executes the user-entered command inside the child process. In all cases, after the user's command has been executed, it is recorded in the command history.
+
+TODO... (Batch Mode)
 
 ### Program Description
 
