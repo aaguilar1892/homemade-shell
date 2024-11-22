@@ -137,10 +137,10 @@ int main(int argc, char* argv[]){
                 if(pid == 0){
                     execl("/bin/sh", "/bin/sh", "-c", cmd, (char *)0);
                     printf("\n");
+
+                    //Add to history if command exists
+                    if(errno != ENOENT){myhistory_add(cmd);}
                 }
-                
-                //Add command to history
-                myhistory_add(cmd);
             }
         }
     }
