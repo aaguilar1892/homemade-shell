@@ -60,6 +60,7 @@ void aliasAdd(char* input) {
         strcpy(aliasNames[numAliases], alias);
         strcpy(aliasCmds[numAliases], command);
         numAliases +=1;
+        printf("alias added: %s = '%s'\n", alias, command);
     }
     else {
         printf("Alias name already exists: Use alias command without input to see existing aliases.");
