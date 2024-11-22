@@ -15,7 +15,10 @@ void cd(char* newd) {
     }
     else {
         //if path provided, change directory
-        chdir(newd);
+        if (chdir(newd) == -1) {
+            //print error message if chdir failed
+            printf("path not found, could not change directory\n");
+        }
     }
     //print current working directory
     printCwd();
