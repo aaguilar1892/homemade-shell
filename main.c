@@ -12,6 +12,8 @@
 #include "redirecting.h"
 #include "alias.h"
 
+void runCommands(char cmd[512], char num[2]);
+
 int main(int argc, char* argv[]){
 
     char cmd[512]; //Represents user-entered string
@@ -29,105 +31,25 @@ int main(int argc, char* argv[]){
             fgets(cmd, 512, stdin);
             cmd[strlen(cmd)-1] = '\0';
 
-            //Remove extra white space from command
-            strcpy(cmd, preprocessing(cmd));
 
-            //If empty command line, process next command
-            if(strcmp(cmd, "\0") == 0 || strncmp(cmd, " ", 1) == 0 || strcmp(cmd, ";") == 0){
-                    continue;
-            }
-
-            //If user input contains multiple commands, separate at ';' and execute sequentially
-
-            //Check for I/O redirection
-            char fileName[512];
-            char *ltPtr = strchr(cmd, '<');
-            char *gtPtr = strchr(cmd, '>');
-
-            if(ltPtr){
-                int i = (int)(ltPtr - cmd);
-                strcpy(fileName, cmd + i+2);
-
-                input_redirection(cmd, fileName);
-                continue;
-            }
-            if(gtPtr){
-                int i = (int)(gtPtr - cmd);
-                strcpy(fileName, cmd + i+2);
-
-                output_redirection(cmd, fileName);
-                continue;
-            }
-
-            //Check if command is an alias
-            checkAlias(cmd);
-            //Execute custom commands
-            if(strncmp(cmd, "myhistory", 9) == 0){
-                //Execute myhistory commands
-                if(strcmp(cmd, "myhistory") == 0 || strcmp(cmd, "myhistory;") == 0){
-                        myhistory_add(cmd);
-                        myhistory();
-                }
-                if(strncmp(cmd, "myhistory -e", 12) == 0 && isdigit(cmd[13])){
-                        strncpy(num, cmd + 13, strlen(cmd));
-                        myhistory_e(atoi(num));
-                }
-                if(strcmp(cmd, "myhistory -c") == 0 || strcmp(cmd, "myhistory -c;") == 0){
-                        myhistory_add(cmd);
-                        myhistory_c();
-                }
-
-                //Usage statements
-                if(strncmp(cmd, "myhistory -e", 12) == 0 && !isdigit(cmd[13])) {printf("Usage: myhistory -e <myhistory_number>\n");}
-            }
-            //Alias command
-            else if(strncmp(cmd, "alias", 5) == 0) {
-
-                char alName[503]; //char array for input (length enough for max name and command length in form name[100]='command[400]') 
-                //if no input, print existing aliases
-                if ((strcmp(cmd, "alias")==0)||(strcmp(cmd,"alias;")==0)) {
-                    printAl();
-                }
-                //if -c flag set, clear all aliases
-                else if ((strcmp(cmd, "alias -c")==0)||(strcmp(cmd,"alias -c;") == 0)) {
-                    aliasClear();
-                }
-                //if -r flag set, remove specific alias
-                else if (strncmp(cmd,"alias -r ",9)==0) {
-                    strcpy(alName, cmd+9);
-                    aliasDel(alName);
-
-                }
-                //add alias
-                else if (strncmp(cmd, "alias ", 6) == 0) {
-                    strcpy(alName, cmd+6);
-                    aliasAdd(alName);
-                }
-            }
-            //cd command
-            else if(strncmp(cmd, "cd",2)==0) {
-                if ((strcmp(cmd,"cd")==0)||(strcmp(cmd,"cd;")==0)) {
-                    cd(NULL);
+            //Seperate user input into individual commands (seperated by ';' if applicable)
+            int cc=0;//currcmd char index iterator
+            for (int c = 0; c<strlen(cmd)+1 /*include null terminator*/; c++) {
+                currCmd[cc] = cmd[c];//copy char crom cmd to currCmd 
+                if (cmd[c] == ';' || cmd[c] == '\0') {
+                    currCmd[cc] = '\0';//null terminate the currCmd string
+                    //execute current command
+                    runCommands(currCmd, num);
+                    //clear currCmd for next command
+                    cc=0;
                 }
                 else {
-                    char path[512];
-                    strcpy(path, cmd+3);
-                    cd(path);
+                    //set currCmd char to cmd char
+                    currCmd[cc] = cmd[c];
+                    cc++;//iterate to next char space
                 }
             }
-            else{
-                //Execute other commands
-                pid_t pid = fork();
 
-                if(pid > 0){wait(NULL);}
-                if(pid == 0){
-                    execl("/bin/sh", "/bin/sh", "-c", cmd, (char *)0);
-                    printf("\n");
-                }
-
-                //Add command to history
-                myhistory_add(cmd);
-            }
         }
     }
 
@@ -136,111 +58,28 @@ int main(int argc, char* argv[]){
         FILE *input_file = fopen(argv[1], "r");
         printf("Batch mode, each line echoed in bold, function outputs (if any) follow\n");
         while(fgets(cmd,512,input_file)) {  
-            printf("\e[1m%s\n\e[m",cmd);  
+            printf("\e[1m%s\e[m",cmd);  
         
-            //If line contains multiple commands, separate at ';' and execute sequentially
-
-
-            //Remove extra white space from command
-            strcpy(cmd, preprocessing(cmd));
-
-            //If empty command line, process next command
-            if(strcmp(cmd, "\0") == 0 || strncmp(cmd, " ", 1) == 0 || strcmp(cmd, ";") == 0){
-                    continue;
-            }
-
-
-            //Check for I/O redirection
-            char fileName[512];
-            char *ltPtr = strchr(cmd, '<');
-            char *gtPtr = strchr(cmd, '>');
-
-            if(ltPtr){
-                int i = (int)(ltPtr - cmd);
-                strcpy(fileName, cmd + i+2);
-
-                input_redirection(cmd, fileName);
-                continue;
-            }
-            if(gtPtr){
-                int i = (int)(gtPtr - cmd);
-                strcpy(fileName, cmd + i+2);
-
-                output_redirection(cmd, fileName);
-                continue;
-            }
-
-            //Check if command is an alias
-            checkAlias(cmd);
-            //Execute custom commands
-            if(strncmp(cmd, "myhistory", 9) == 0){
-                //Execute myhistory commands
-                if(strcmp(cmd, "myhistory") == 0 || strcmp(cmd, "myhistory;") == 0){
-                        myhistory_add(cmd);
-                        myhistory();
-                }
-                if(strncmp(cmd, "myhistory -e", 12) == 0 && isdigit(cmd[13])){
-                        strncpy(num, cmd + 13, strlen(cmd));
-                        myhistory_e(atoi(num));
-                }
-                if(strcmp(cmd, "myhistory -c") == 0 || strcmp(cmd, "myhistory -c;") == 0){
-                        myhistory_add(cmd);
-                        myhistory_c();
-                }
-
-                //Usage statements
-                if(strncmp(cmd, "myhistory -e", 12) == 0 && !isdigit(cmd[13])) {printf("Usage: myhistory -e <myhistory_number>\n");}
-            }
-            //Alias command
-            else if(strncmp(cmd, "alias", 5) == 0) {
-                char alName[503]; //char array for input (length enough for max name and command length in form name[100]='command[400]') 
-                //if no input, print existing aliases
-                if ((strcmp(cmd, "alias")==0)||(strcmp(cmd,"alias;")==0)) {
-                    printAl();
-                }
-                //if -c flag set, clear all aliases
-                else if ((strcmp(cmd, "alias -c")==0)||(strcmp(cmd,"alias -c;") == 0)) {
-                    aliasClear();
-                }
-                //if -r flag set, remove specific alias
-                else if (strncmp(cmd,"alias -r ",9)==0) {
-                    
-                    strcpy(alName, cmd+9);
-                    aliasDel(alName);
-
-                }
-                //add alias
-                else if (strncmp(cmd, "alias ", 6) == 0) {
-                    
-                    strcpy(alName, cmd+6);
-                    aliasAdd(alName);
-                }
-            }
-            //cd command
-            else if(strncmp(cmd, "cd",2)==0) {
-                if ((strcmp(cmd,"cd")==0)||(strcmp(cmd,"cd;")==0)) {
-                    cd(NULL);
+            //Seperate input into individual commands (seperated by ';' if applicable)
+            int cc=0;//currcmd char index iterator
+            for (int c = 0; c<strlen(cmd)+1 /*include null terminator*/; c++) {
+                currCmd[cc] = cmd[c];//copy char crom cmd to currCmd 
+                if (cmd[c] == ';' || cmd[c] == '\0') {
+                    currCmd[cc] = '\0';//null terminate the currCmd string
+                    //execute current command
+                    runCommands(currCmd, num);
+                    //clear currCmd for next command
+                    cc=0;
                 }
                 else {
-                    char path[512];
-                    strcpy(path, cmd+3);
-                    cd(path);
+                    //set currCmd char to cmd char
+                    currCmd[cc] = cmd[c];
+                    cc++;//iterate to next char space
                 }
             }
-            else{
-                //Execute other commands
-                pid_t pid = fork();
 
-                if(pid > 0){wait(NULL);}
-                if(pid == 0){
-                    execl("/bin/sh", "/bin/sh", "-c", cmd, (char *)0);
-                    printf("\n");
-                }
-
-                //Add command to history
-                myhistory_add(cmd);
-            }
         }
+        //close input file stream
         fclose(input_file);
     }
 
@@ -253,4 +92,106 @@ int main(int argc, char* argv[]){
     }
 
     return 0;
+}
+
+void runCommands(char cmd[512], char num[2]) {
+ 
+    //Remove extra white space from command
+    strcpy(cmd, preprocessing(cmd));
+
+    //If empty command line, process next command
+    if(strcmp(cmd, "\0") == 0 || strncmp(cmd, " ", 1) == 0 || strcmp(cmd, ";") == 0){
+        return;
+    }
+
+    //Check for I/O redirection
+    char fileName[512];
+    char *ltPtr = strchr(cmd, '<');
+    char *gtPtr = strchr(cmd, '>');
+
+    if(ltPtr){
+        int i = (int)(ltPtr - cmd);
+        strcpy(fileName, cmd + i+2);
+
+        input_redirection(cmd, fileName);
+        return;
+    }
+    if(gtPtr){
+        int i = (int)(gtPtr - cmd);
+        strcpy(fileName, cmd + i+2);
+
+        output_redirection(cmd, fileName);
+        return;
+    }
+
+    //Check if command is an alias
+    checkAlias(cmd);
+    //Execute custom commands
+    if(strncmp(cmd, "myhistory", 9) == 0){
+        //Execute myhistory commands
+        if(strcmp(cmd, "myhistory") == 0 || strcmp(cmd, "myhistory;") == 0){
+                myhistory_add(cmd);
+                myhistory();
+        }
+        if(strncmp(cmd, "myhistory -e", 12) == 0 && isdigit(cmd[13])){
+                strncpy(num, cmd + 13, strlen(cmd));
+                myhistory_e(atoi(num));
+        }
+        if(strcmp(cmd, "myhistory -c") == 0 || strcmp(cmd, "myhistory -c;") == 0){
+                myhistory_add(cmd);
+                myhistory_c();
+        }
+
+        //Usage statements
+        if(strncmp(cmd, "myhistory -e", 12) == 0 && !isdigit(cmd[13])) {printf("Usage: myhistory -e <myhistory_number>\n");}
+    }
+    //Alias command
+    else if(strncmp(cmd, "alias", 5) == 0) {
+        char alName[503]; //char array for input (length enough for max name and command length in form name[100]='command[400]') 
+        //if no input, print existing aliases
+        if ((strcmp(cmd, "alias")==0)||(strcmp(cmd,"alias;")==0)) {
+            printAl();
+        }
+        //if -c flag set, clear all aliases
+        else if ((strcmp(cmd, "alias -c")==0)||(strcmp(cmd,"alias -c;") == 0)) {
+            aliasClear();
+        }
+        //if -r flag set, remove specific alias
+        else if (strncmp(cmd,"alias -r ",9)==0) {
+            
+            strcpy(alName, cmd+9);
+            aliasDel(alName);
+
+        }
+        //add alias
+        else if (strncmp(cmd, "alias ", 6) == 0) {
+            
+            strcpy(alName, cmd+6);
+            aliasAdd(alName);
+        }
+    }
+    //cd command
+    else if(strncmp(cmd, "cd",2)==0) {
+        if ((strcmp(cmd,"cd")==0)||(strcmp(cmd,"cd;")==0)) {
+            cd(NULL);
+        }
+        else {
+            char path[512];
+            strcpy(path, cmd+3);
+            cd(path);
+        }
+    }
+    else{
+        //Execute other commands
+        pid_t pid = fork();
+
+        if(pid > 0){wait(NULL);}
+        if(pid == 0){
+            execl("/bin/sh", "/bin/sh", "-c", cmd, (char *)0);
+            printf("\n");
+        }
+
+        //Add command to history
+        myhistory_add(cmd);
+    }
 }
