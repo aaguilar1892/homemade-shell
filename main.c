@@ -114,6 +114,7 @@ void runCommands(char cmd[512], char num[2]) {
         strcpy(fileName, cmd + i+2);
 
         input_redirection(cmd, fileName);
+        myhistory_add(cmd);
         return;
     }
     if(gtPtr){
@@ -121,6 +122,7 @@ void runCommands(char cmd[512], char num[2]) {
         strcpy(fileName, cmd + i+2);
 
         output_redirection(cmd, fileName);
+        myhistory_add(cmd);
         return;
     }
 
@@ -151,34 +153,39 @@ void runCommands(char cmd[512], char num[2]) {
         //if no input, print existing aliases
         if ((strcmp(cmd, "alias")==0)||(strcmp(cmd,"alias;")==0)) {
             printAl();
+            myhistory_add(cmd);
         }
         //if -c flag set, clear all aliases
         else if ((strcmp(cmd, "alias -c")==0)||(strcmp(cmd,"alias -c;") == 0)) {
             aliasClear();
+            myhistory_add(cmd);
         }
         //if -r flag set, remove specific alias
         else if (strncmp(cmd,"alias -r ",9)==0) {
             
             strcpy(alName, cmd+9);
             aliasDel(alName);
-
+            myhistory_add(cmd);
         }
         //add alias
         else if (strncmp(cmd, "alias ", 6) == 0) {
             
             strcpy(alName, cmd+6);
             aliasAdd(alName);
+            myhistory_add(cmd);
         }
     }
     //cd command
     else if(strncmp(cmd, "cd",2)==0) {
         if ((strcmp(cmd,"cd")==0)||(strcmp(cmd,"cd;")==0)) {
             cd(NULL);
+            myhistory_add(cmd);
         }
         else {
             char path[512];
             strcpy(path, cmd+3);
             cd(path);
+            myhistory_add(cmd);
         }
     }
     else{
