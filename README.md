@@ -84,4 +84,5 @@ To execute the shell in **batch mode**, type `./newshell [file]` where `[file]` 
 
 ## Known Issues
 
-Currently no issues are known. Issues may arise as we further develop this project.
+When **exit** command is used with other processes it fails to exit the shell correctly.
+Additionally, the Signal Handling and Terminal Control was assigned to a specific group member however they failed to implement it correctly.
