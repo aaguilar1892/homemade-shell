@@ -221,14 +221,41 @@ void runCommands(char cmd[512], char num[2]) {
     else{
         //Execute other commands
         pid_t pid = fork();
-
-        if(pid > 0){wait(NULL);}
-        if(pid == 0){
-            execl("/bin/sh", "/bin/sh", "-c", cmd, (char *)0);
-            printf("\n");
-        }
-
-        //Add command to history
-        myhistory_add(cmd);
+    if (pid == -1) {
+        fprintf(stderr, "Error: Failed to create process: %s\n", strerror(errno));
+        return;
     }
+
+    if (pid == 0) {  // Child process
+        // Try to execute the command directly first
+        char *args[512];
+        int arg_count = 0;
+        
+        // Parse command into arguments
+        char *token = strtok(cmd, " ");
+        while (token != NULL && arg_count < 511) {
+            args[arg_count++] = token;
+            token = strtok(NULL, " ");
+        }
+        args[arg_count] = NULL;
+
+        execvp(args[0], args);
+
+        // If execvp fails, try using shell
+        execl("/bin/sh", "sh", "-c", cmd, (char *)NULL);
+        
+        // If we get here, both execution attempts failed
+        fprintf(stderr, "Error: Command '%s' not found\n", args[0]);
+        exit(1);
+    } else {
+        // Parent process
+        int status;
+        waitpid(pid, &status, 0);
+        
+        // Add command to history if execution was successful
+        if (WIFEXITED(status) && WEXITSTATUS(status) == 0) {
+            myhistory_add(cmd);
+        }
+    }
+}
 }
