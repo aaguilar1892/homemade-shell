@@ -62,6 +62,10 @@ int main(int argc, char* argv[]){
     //Batch mode
     if(argc == 2){
         FILE *input_file = fopen(argv[1], "r");
+        if (input_file == NULL) {
+            fprintf(stderr, "Error opening input file, make sure that the file exists and try again\n");
+            return -1;
+        }
         printf("Batch mode, each line echoed in bold, function outputs (if any) follow\n");
         while(fgets(cmd,512,input_file)) {  
             printf("\e[1m%s\e[m",cmd);  

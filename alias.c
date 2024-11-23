@@ -49,10 +49,20 @@ void checkAlias (char* name) {
 }
 
 void aliasAdd(char* input) {
-    char alias[100];
-    char command[400];
-    strcpy(alias, strtok(input,"='"));
-    strcpy(command, strtok(NULL, "'"));
+    char* alias;
+    char* command;
+    alias = strtok(input,"='");
+    if (alias == NULL) {
+        fprintf(stderr, "alias could not be added, check format (name='command')\n");
+        return;
+    }
+
+    command = strtok(NULL, "'");
+    if (command == NULL) {
+        fprintf(stderr, "alias could not be added, check format (name='command')\n");
+        return;
+    }
+
 
     //see if the alias already exists
     int index = getAlias(alias);
