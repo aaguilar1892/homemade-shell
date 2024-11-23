@@ -56,7 +56,7 @@ Both of the modes pass commands to the runCommands() function. In the function, 
 - Empty command line or ;  ;: command is ignored and continues to next command.
 - Extra whitespaces: each command is preprocessed by the preprocessing() function which removes all extra whitespace.
 - EOF reached without exit command (Batch Mode): The program ends and no errors are printed.
-- Ctrl-D entered as user input in interactive mode: Program checks for fgets() == NULL and exits program if Ctrl-D (EOF) was input.
+- Ctrl-D entered as user input (Interactive Mode): Program checks for fgets() == NULL and exits program if Ctrl-D (EOF) was input.
 
 **myhistory**
 
