@@ -34,8 +34,10 @@ int main(int argc, char* argv[]){
             
             //Get user input
             printf("Enter command: ");
-            fgets(cmd, 512, stdin);
-
+            if (fgets(cmd, 512, stdin) == NULL) {
+                printf("\n");
+                return 0;
+            }
             if (cmd[strlen(cmd)-1] != '\n') {
                 printf("Input too long, couldn't execute\n");
                 while (cmd[strlen(cmd)-1] != '\n') {
