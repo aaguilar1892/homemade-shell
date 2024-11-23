@@ -11,10 +11,15 @@
 #include "cd.h"
 #include "redirecting.h"
 #include "alias.h"
+#include "path.h"
+#include "pipelining.h"
 
 void runCommands(char cmd[512], char num[2]);
 
 int main(int argc, char* argv[]){
+
+    // Initialize path at the start of the program
+    initialize_path();
 
     char cmd[512]; //Represents user-entered string
     char currCmd[512]; //Represents individual command to be processed
@@ -91,6 +96,7 @@ int main(int argc, char* argv[]){
             exit(1);
     }
 
+    restore_path();
     return 0;
 }
 
@@ -101,6 +107,13 @@ void runCommands(char cmd[512], char num[2]) {
 
     //If empty command line, process next command
     if(strcmp(cmd, "\0") == 0 || strncmp(cmd, " ", 1) == 0 || strcmp(cmd, ";") == 0){
+        return;
+    }
+
+    // Check for pipeline command first
+    if (strchr(cmd, '|') != NULL) {
+        handle_pipeline(cmd);
+        myhistory_add(cmd);
         return;
     }
 
@@ -122,6 +135,23 @@ void runCommands(char cmd[512], char num[2]) {
         strcpy(fileName, cmd + i+2);
 
         output_redirection(cmd, fileName);
+        myhistory_add(cmd);
+        return;
+    }
+
+    // Handle path command
+    if (strncmp(cmd, "path", 4) == 0) {
+        char *args[4];  // Maximum 3 arguments plus NULL
+        int arg_count = 0;
+        char *token = strtok(cmd, " ");
+        
+        while (token != NULL && arg_count < 3) {
+            args[arg_count++] = token;
+            token = strtok(NULL, " ");
+        }
+        args[arg_count] = NULL;
+        
+        path_builtin(args);
         myhistory_add(cmd);
         return;
     }
