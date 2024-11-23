@@ -9,6 +9,8 @@
 #include "myhistory.h"
 #include "cd.h"
 #include "alias.h"
+#include "path.h"
+#include "pipelining.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -55,26 +57,57 @@ void myhistory_e(int num){
         //Execute specified command
 
         //Check for custom commands
-        if(strcmp(cmd_history[num - 1], "myhistory") == 0) {myhistory();}
-        else if((strcmp(cmd_history[num-1], "alias")==0)||(strcmp(cmd_history[num-1],"alias;")==0)) {printAl();}
-        else if((strcmp(cmd_history[num-1], "alias -c")==0)||(strcmp(cmd_history[num-1],"alias -c;")==0)) {aliasClear();}
+        if(strcmp(cmd_history[num - 1], "myhistory") == 0) {
+                myhistory();
+                myhistory_add(cmd_history[num-1]);
+        }
+        else if((strcmp(cmd_history[num-1], "alias")==0)||(strcmp(cmd_history[num-1],"alias;")==0)) {
+                printAl();
+                myhistory_add(cmd_history[num-1]);
+        }
+        else if((strcmp(cmd_history[num-1], "alias -c")==0)||(strcmp(cmd_history[num-1],"alias -c;")==0)) {
+                aliasClear();
+                myhistory_add(cmd_history[num-1]);
+        }
         else if(strncmp(cmd_history[num-1],"alias -r ",9)==0) {
                 strcpy(alName, cmd_history[num-1]+9);
                 aliasDel(alName);
+                myhistory_add(cmd_history[num-1]);
         }
         else if(strncmp(cmd_history[num-1], "alias ", 6) == 0) {
                 strcpy(alName, cmd_history[num-1]+6);
                 aliasAdd(alName);
+                myhistory_add(cmd_history[num-1]);
         }
         else if(strncmp(cmd_history[num-1], "cd",2)==0) {
                 if ((strcmp(cmd_history[num-1],"cd")==0)||(strcmp(cmd_history[num-1],"cd;")==0)) {
                         cd(NULL);
+                        myhistory_add(cmd_history[num-1]);
                 }
                 else {
                         char path[512];
                         strcpy(path, cmd_history[num-1]+3);
                         cd(path);
+                        myhistory_add(cmd_history[num-1]);
                 }
+        }
+        else if(strchr(cmd_history[num-1], '|') != NULL) {
+                handle_pipeline(cmd_history[num-1]);
+                myhistory_add(cmd_history[num-1]);
+        }
+        else if(strncmp(cmd_history[num-1], "path", 4) == 0) {
+                char *args[4];  // Maximum 3 arguments plus NULL
+                int arg_count = 0;
+                char *token = strtok(cmd_history[num-1], " ");
+
+                while (token != NULL && arg_count < 3) {
+                        args[arg_count++] = token;
+                        token = strtok(NULL, " ");
+                }
+                args[arg_count] = NULL;
+
+                path_builtin(args);
+                myhistory_add(cmd_history[num-1]);
         }
         else{
                 //Execute other commands
