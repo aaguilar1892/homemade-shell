@@ -35,13 +35,16 @@ Both of the modes pass commands to the runCommands() function. In the function, 
 
 ### Program Description
 
-- filename: description...
 - preprocessing.c: Removes extra whitespace from user-entered command
 - redirecting.c: Implements input & output redirection
 - myhistory.c: Manages a list of the executed commands
 - alias.c: Manages the alias database with addition, removal, and print functions
 - cd.c: Changes the working directory to the user's home or to the specified path
-- ...
+- exit.c: Exits the shell
+- path.c: Allows the user to show the current pathname list and append/remove one pathname
+- pipelining.c: Implements pipelining
+- signal-control.c: Allows the user to stop or pause subprocesses that the shell creates
+- main.c: Allows the user to execute commands in the shell entered via the command line or a file
 
 ### Complete Specification
 
