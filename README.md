@@ -48,6 +48,16 @@ Both of the modes pass commands to the runCommands() function. In the function, 
 
 ### Complete Specification
 
+**Defensive Programming**
+- Incorrect # of command line args when opening shell: The program outputs an error message to stderr and exits.
+- Batch input file doesn't exist/fails to open: Program outputs error message to stderr and exits.
+- Command not found/couldn't be executed: appropriate error messages are printed to terminal and program continues to next command.
+- Input length > 512 characters: Program will output error message and continue to next command by ignoring the rest of the long command.
+- Empty command line or ;  ;: command is ignored and continues to next command.
+- Extra whitespaces: each command is preprocessed by the preprocessing() function which removes all extra whitespace.
+- EOF reached without exit command (Batch Mode): The program ends and no errors are printed.
+- Ctrl-D entered as user input in interactive mode: Program checks for fgets() == NULL and exits program if Ctrl-D (EOF) was input.
+
 **myhistory**
 
 If the user enters a command that does not exist, it will still be recorded in the command history. Additionally, when the user executes one of the myhistory commands, only the _myhistory_ command with no flags will be recorded in the command history. Because of this, when the user clears the command history with _myhistory -c_, if they call the _myhistory_ command immediately after this, they will see _myhistory_ as the only command in the history. As for _myhistory -e [command #]_, the command number that it refers to will be recorded in the history in place of the command itself. 
