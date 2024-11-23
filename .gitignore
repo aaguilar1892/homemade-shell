@@ -4,3 +4,6 @@
 *.out
 *.exe
 *.app
+*.o
+
+newshell

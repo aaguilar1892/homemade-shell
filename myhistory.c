@@ -53,6 +53,7 @@ void myhistory_c(){
 void myhistory_e(int num){
 
         char numChar[2];
+        char alName[503];
 
         //Execute specified command
 
