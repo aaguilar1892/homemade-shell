@@ -13,6 +13,7 @@
 #include "alias.h"
 #include "path.h"
 #include "pipelining.h"
+#include "exit.h"
 
 void runCommands(char cmd[512], char num[2]);
 
@@ -218,6 +219,12 @@ void runCommands(char cmd[512], char num[2]) {
             myhistory_add(cmd);
         }
     }
+	//exit command
+	else if(strncmp(cmd, "exit", 4)==0){
+		if(strcmp(cmd, "exit")==0){
+			exit_builtin();
+		}
+	}
     else{
         //Execute other commands
         pid_t pid = fork();
