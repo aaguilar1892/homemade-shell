@@ -35,6 +35,15 @@ int main(int argc, char* argv[]){
             //Get user input
             printf("Enter command: ");
             fgets(cmd, 512, stdin);
+
+            if (cmd[strlen(cmd)-1] != '\n') {
+                printf("Input too long, couldn't execute\n");
+                while (cmd[strlen(cmd)-1] != '\n') {
+                    fgets(cmd, 512, stdin);
+                }
+                continue;
+            }
+            
             cmd[strlen(cmd)-1] = '\0';
 
 
@@ -69,7 +78,14 @@ int main(int argc, char* argv[]){
         printf("Batch mode, each line echoed in bold, function outputs (if any) follow\n");
         while(fgets(cmd,512,input_file)) {  
             printf("\e[1m%s\e[m",cmd);  
-        
+            if (cmd[strlen(cmd)-1] != '\n') {
+                printf("\e[1mInput too long, couldn't execute\e[m\n");
+                while (cmd[strlen(cmd)-1] != '\n') {
+                    fgets(cmd, 512, input_file);
+                }
+                continue;
+            }
+
             //Seperate input into individual commands (seperated by ';' if applicable)
             int cc=0;//currcmd char index iterator
             for (int c = 0; c<strlen(cmd)+1 /*include null terminator*/; c++) {
