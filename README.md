@@ -84,7 +84,7 @@ To clean up any files that were created in the process, use `make clean`.
 
 To compile the files manually from the terminal, you will have to type out the complete string command. The command is:
 
-`gcc -Wall -Wextra -g main.c preprocessing.c redirecting.c myhistory.c cd.c alias.c path.c pipelining.c exit.c signal-control.c -o newshell`
+`gcc -g main.c preprocessing.c redirecting.c myhistory.c cd.c alias.c path.c pipelining.c exit.c signal-control.c -o newshell`
 
 Executing the command will create an executable file called `newshell`.
 
