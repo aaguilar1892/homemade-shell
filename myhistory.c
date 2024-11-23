@@ -52,7 +52,6 @@ void myhistory_c(){
 //Executes one of 20 stored commands
 void myhistory_e(int num){
 
-        char numChar[2];
         char alName[503];
 
         //Execute specified command
