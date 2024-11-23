@@ -7,6 +7,8 @@
  */
 
 #include "myhistory.h"
+#include "cd.h"
+#include "alias.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -54,6 +56,26 @@ void myhistory_e(int num){
 
         //Check for custom commands
         if(strcmp(cmd_history[num - 1], "myhistory") == 0) {myhistory();}
+        else if((strcmp(cmd_history[num-1], "alias")==0)||(strcmp(cmd_history[num-1],"alias;")==0)) {printAl();}
+        else if((strcmp(cmd_history[num-1], "alias -c")==0)||(strcmp(cmd_history[num-1],"alias -c;")==0)) {aliasClear();}
+        else if(strncmp(cmd_history[num-1],"alias -r ",9)==0) {
+                strcpy(alName, cmd_history[num-1]+9);
+                aliasDel(alName);
+        }
+        else if(strncmp(cmd_history[num-1], "alias ", 6) == 0) {
+                strcpy(alName, cmd_history[num-1]+6);
+                aliasAdd(alName);
+        }
+        else if(strncmp(cmd_history[num-1], "cd",2)==0) {
+                if ((strcmp(cmd_history[num-1],"cd")==0)||(strcmp(cmd_history[num-1],"cd;")==0)) {
+                        cd(NULL);
+                }
+                else {
+                        char path[512];
+                        strcpy(path, cmd_history[num-1]+3);
+                        cd(path);
+                }
+        }
         else{
                 //Execute other commands
                 pid_t pid = fork();
